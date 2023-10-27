@@ -1,4 +1,4 @@
-export const driverColumns = [
+export const driverVColumns = [
   { field: "id", headerName: "ID", width: 70 },
   {
     field: "user",

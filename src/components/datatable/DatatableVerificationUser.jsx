@@ -10,6 +10,8 @@ import {
   doc,
   onSnapshot,
   updateDoc,
+  where,
+  query
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import { userVColumn } from "../../datatablesourceVerificationUser";
@@ -35,7 +37,7 @@ const DatatableVUser = () => {
 
     // LISTEN (REALTIME)
     const unsub = onSnapshot(
-      collection(db, "users" ),
+      query(collection(db, "users"),where('isVerified', "==", false)),
       (snapShot) => {
         let list = [];
         snapShot.docs.forEach((doc) => {
@@ -79,21 +81,19 @@ const DatatableVUser = () => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            <Link to="/users/test" style={{ textDecoration: "none" }}>
-              <div className="viewButton">View</div>
-            </Link>
+           <div
+              className="updateButton"
+              onClick={() => handleUpdate(params.row.id)}
+            >
+              Verify
+            </div>
             <div
               className="deleteButton"
               onClick={() => handleDelete(params.row.id)}
             >
               Delete
             </div>
-            <div
-              className="updateButton"
-              onClick={() => handleUpdate(params.row.id)}
-            >
-              Verify
-            </div>
+            
           </div>
         );
       },
@@ -102,10 +102,7 @@ const DatatableVUser = () => {
   return (
     <div className="datatable">
       <div className="datatableTitle">
-        Add New User
-        <Link to="/users/new" className="link">
-          Add New
-        </Link>
+       User Verification
       </div>
       <DataGrid
         className="datagrid"

@@ -1,21 +1,26 @@
 import "./sidebar.scss";
-import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import CreditCardIcon from "@mui/icons-material/CreditCard";
-import StoreIcon from "@mui/icons-material/Store";
-import InsertChartIcon from "@mui/icons-material/InsertChart";
-import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
+import { HowToReg,HowToRegOutlined} from "@mui/icons-material";
+import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
+import PersonIcon from '@mui/icons-material/Person';
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import SettingsSystemDaydreamOutlinedIcon from "@mui/icons-material/SettingsSystemDaydreamOutlined";
-import PsychologyOutlinedIcon from "@mui/icons-material/PsychologyOutlined";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { Link } from "react-router-dom";
 import { DarkModeContext } from "../../context/darkModeContext";
 import { useContext } from "react";
+import {  signOut } from "firebase/auth";
+import { auth } from "../../firebase";
 
 const Sidebar = () => {
+  const handleLogout = ()=>{
+    
+
+  signOut(auth).then(() => {
+    // Sign-out successful.
+    console.log(auth);
+  }).catch((error) => {
+    // An error happened.
+  });
+  }
   const { dispatch } = useContext(DarkModeContext);
   return (
     <div className="sidebar">
@@ -30,7 +35,7 @@ const Sidebar = () => {
           <p className="title">MAIN</p>
           <Link to="/" style={{ textDecoration: "none" }}>
             <li>
-              <PersonOutlineIcon className="icon" />
+              <DashboardOutlinedIcon className="icon" />
               <span>Dashboard</span>
             </li>
           </Link>
@@ -44,7 +49,7 @@ const Sidebar = () => {
           </Link>
           <Link to="/vuser" style={{ textDecoration: "none" }}>
             <li>
-              <PersonOutlineIcon className="icon" />
+              <HowToRegOutlined className="icon" />
               <span>User Verification</span>
             </li>
           </Link>
@@ -52,24 +57,25 @@ const Sidebar = () => {
           <p className="title">Driver</p>
           <Link to="/driver" style={{ textDecoration: "none" }}>
             <li>
-              <PersonOutlineIcon className="icon" />
+              <PersonIcon className="icon" />
               <span>List</span>
             </li>
           </Link>
 
-          <Link to="/" style={{ textDecoration: "none" }}>
+          <Link to="/vdriver" style={{ textDecoration: "none" }}>
             <li>
-              <PersonOutlineIcon className="icon" />
+              <HowToReg className="icon" />
               <span>Driver Verification</span>
             </li>
           </Link>
        
           <p className="title">Log out</p>
-         
+          <Link   onClick={handleLogout} style={{ textDecoration: "none" }}>
           <li>
             <ExitToAppIcon className="icon" />
-            <span>Logout</span>
+            <span> Logout</span>
           </li>
+          </Link>
         </ul>
       </div>
       <div className="bottom">

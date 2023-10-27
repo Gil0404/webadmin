@@ -10,11 +10,14 @@ import {
   doc,
   onSnapshot,
   updateDoc,
+  where,
+  query
 } from "firebase/firestore";
 import { db } from "../../firebase";
-import { driverColumns } from "../../datatablesourceDriver";
 
-const DatatableDriver = () => {
+import { driverVColumns } from "../../datatablesourceVerificationDriver";
+
+const DatatableVDriver = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -35,7 +38,7 @@ const DatatableDriver = () => {
 
     // LISTEN (REALTIME)
     const unsub = onSnapshot(
-      collection(db, "drivers"),
+      query(collection(db, "drivers"),where('isVerified', "==", false)),
       (snapShot) => {
         let list = [];
         snapShot.docs.forEach((doc) => {
@@ -64,8 +67,8 @@ const DatatableDriver = () => {
 
   const handleUpdate = async (id) => {
     try {
-      await updateDoc(doc(db, "drivers", id));
-      setData(data.filter((item) => item.id !== id));
+      await updateDoc(doc(db, "drivers", id ), {isVerified: true});
+     
     } catch (err) {
       console.log(err);
     }
@@ -79,32 +82,35 @@ const DatatableDriver = () => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            <Link to="/users/test" style={{ textDecoration: "none" }}>
-              <div className="viewButton">View</div>
-            </Link>
-            <div
-              className="deleteButton"
-              onClick={() => handleDelete(params.row.id)}
-            >
-              Delete
-            </div>
+           
+           <div
+            className="updateButton"
+            onClick={() => handleUpdate(params.row.id)}
+          >
+            Verify
           </div>
+          
+          <div
+            className="deleteButton"
+            onClick={() => handleDelete(params.row.id)}
+          >
+            Delete
+          </div>
+        
+        </div>
         );
       },
     },
   ];
   return (
     <div className="datatable">
-      <div className="datatableTitle">
-        Add New User
-        <Link to="/users/new" className="link">
-          Add New
-        </Link>
+    <div className="datatableTitle">
+       Driver Verification
       </div>
       <DataGrid
         className="datagrid"
         rows={data}
-        columns={driverColumns.concat(actionColumn)}
+        columns={driverVColumns.concat(actionColumn)}
         pageSize={9}
         rowsPerPageOptions={[9]}
         checkboxSelection
@@ -113,4 +119,4 @@ const DatatableDriver = () => {
   );
 };
 
-export default DatatableDriver;
+export default DatatableVDriver;

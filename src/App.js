@@ -11,6 +11,8 @@ import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
 import { AuthContext } from "./context/AuthContext";
 import Vuser from "./pages/list/verficationUser";
+import Vdriver from "./pages/list/verficationDriver";
+
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
@@ -117,6 +119,33 @@ function App() {
                 }
               />
             </Route>
+            <Route path="vdriver">
+              <Route
+                index
+                element={
+                  <RequireAuth>
+                    <Vdriver />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path=":productId"
+                element={
+                  <RequireAuth>
+                    <Single />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="new"
+                element={
+                  <RequireAuth>
+                    <New inputs={productInputs} title="Add New Product" />
+                  </RequireAuth>
+                }
+              />
+            </Route>
+        
           </Route>
         </Routes>
       </BrowserRouter>

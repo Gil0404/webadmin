@@ -1,44 +1,26 @@
 import "./widget.scss";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
+
 import { useEffect, useState } from "react";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
-
+import { HowToReg,HowToRegOutlined} from "@mui/icons-material";
+import PersonIcon from '@mui/icons-material/Person';
+import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 const Widget = ({ type }) => {
-  const [amount, setAmount] = useState(null);
-  const [diff, setDiff] = useState(null);
+  const [vusernum, setVusernum] = useState(null);
+  const [vdrivernum, setVdrivernum] = useState(null);
+  const [usernum, setUsernum] = useState(null);
+  const [drivernum, setDrivernum] = useState(null);
   let data;
 
   switch (type) {
     case "user":
-      data = {
+      data = {  
         title: "USERS",
-        isMoney: false,
-        link: "See all users",
+        count: usernum,
         query:"users",
         icon: (
           <PersonOutlinedIcon
-            className="icon"
-            style={{
-              color: "crimson",
-              backgroundColor: "rgba(255, 0, 0, 0.2)",
-            }}
-          />
-        ),
-      };
-      break;
-    case "order":
-      data = {
-        title: "ORDERS",
-        isMoney: false,
-        link: "View all orders",
-        icon: (
-          <ShoppingCartOutlinedIcon
             className="icon"
             style={{
               backgroundColor: "rgba(218, 165, 32, 0.2)",
@@ -48,31 +30,43 @@ const Widget = ({ type }) => {
         ),
       };
       break;
-    case "earning":
+    case "driver":
       data = {
-        title: "EARNINGS",
-        isMoney: true,
-        link: "View net earnings",
+        title: "DRIVERS",
+        count: drivernum,
         icon: (
-          <MonetizationOnOutlinedIcon
+          <PersonIcon
             className="icon"
-            style={{ backgroundColor: "rgba(0, 128, 0, 0.2)", color: "green" }}
+      
+              style={{ backgroundColor: "rgba(0, 128, 0, 0.2)", color: "green" }}
+            
           />
         ),
       };
       break;
-    case "product":
+    case "vuser":
       data = {
-        title: "PRODUCTS",
-        query:"products",
-        link: "See details",
+        title: "VERIFIED USERS",
+        count: vusernum,
         icon: (
-          <AccountBalanceWalletOutlinedIcon
+          <HowToRegOutlined
             className="icon"
             style={{
-              backgroundColor: "rgba(128, 0, 128, 0.2)",
-              color: "purple",
+              backgroundColor: "rgba(218, 165, 32, 0.2)",
+              color: "goldenrod",
             }}
+          />
+        ),
+      };
+      break;
+    case "vdriver":
+      data = {
+        title: "VERIFIED DRIVERS",
+        count: vdrivernum,
+        icon: (
+          <HowToReg
+            className="icon"
+            style={{ backgroundColor: "rgba(0, 128, 0, 0.2)", color: "green" }}
           />
         ),
       };
@@ -83,29 +77,35 @@ const Widget = ({ type }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const today = new Date();
-      const lastMonth = new Date(new Date().setMonth(today.getMonth() - 1));
-      const prevMonth = new Date(new Date().setMonth(today.getMonth() - 2));
 
-      const lastMonthQuery = query(
-        collection(db, data.query),
-        where("timeStamp", "<=", today),
-        where("timeStamp", ">", lastMonth)
+      const drivers = query(
+        collection(db, "drivers"),
+       
       );
-      const prevMonthQuery = query(
-        collection(db, data.query),
-        where("timeStamp", "<=", lastMonth),
-        where("timeStamp", ">", prevMonth)
+      const users = query(
+        collection(db, "users"),
+  
+      );
+      const vusers = query(
+        collection(db, "users"),where("isVerified","==", true)
+  
       );
 
-      const lastMonthData = await getDocs(lastMonthQuery);
-      const prevMonthData = await getDocs(prevMonthQuery);
-
-      setAmount(lastMonthData.docs.length);
-      setDiff(
-        ((lastMonthData.docs.length - prevMonthData.docs.length) / prevMonthData.docs.length) *
-          100
+      const vdriver = query(
+        collection(db, "drivers"),where("isVerified","==", true)
+ 
       );
+
+      const driversdata = await getDocs(drivers);
+      const usersdata = await getDocs(users);
+      const vusersdata = await getDocs(vusers);
+      const vdrivesdata = await getDocs(vdriver);
+
+
+      setDrivernum(driversdata.docs.length);
+      setUsernum(usersdata.docs.length);
+      setVusernum(vusersdata.docs.length);
+      setVdrivernum(vdrivesdata.docs.length);
     };
     fetchData();
   }, []);
@@ -115,15 +115,12 @@ const Widget = ({ type }) => {
       <div className="left">
         <span className="title">{data.title}</span>
         <span className="counter">
-          {data.isMoney && "$"} {amount}
+         {data.count}
         </span>
-        <span className="link">{data.link}</span>
+       
       </div>
       <div className="right">
-        <div className={`percentage ${diff < 0 ? "negative" : "positive"}`}>
-          {diff < 0 ? <KeyboardArrowDownIcon/> : <KeyboardArrowUpIcon/> }
-          {diff} %
-        </div>
+       
         {data.icon}
       </div>
     </div>
