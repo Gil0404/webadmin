@@ -1,6 +1,6 @@
 import "./datatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
-import { userColumns, userRows } from "../../datatablesource";
+
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
@@ -10,10 +10,13 @@ import {
   doc,
   onSnapshot,
   updateDoc,
+  where,
+  query
 } from "firebase/firestore";
 import { db } from "../../firebase";
+import { Shistorylog } from "../../showhistorylog";
 
-const Datatable = () => {
+const ShowHlog = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -34,13 +37,14 @@ const Datatable = () => {
 
     // LISTEN (REALTIME)
     const unsub = onSnapshot(
-      collection(db, "commuters"),
+      query(collection(db, "POSTED_RIDES"),where('request', "==", "IQBBRHXd5sbT5EVIHCBM7EEC0kG3")),
       (snapShot) => {
         let list = [];
         snapShot.docs.forEach((doc) => {
           list.push({ id: doc.id, ...doc.data() });
         });
         setData(list);
+        console.log (data)
       },
       (error) => {
         console.log(error);
@@ -53,29 +57,16 @@ const Datatable = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    var deletevar = window.confirm("Delete this user ?");
-    if ((deletevar) == true) {
-      try {
-        await deleteDoc(doc(db, "commuters", id));
-        setData(data.filter((item) => item.id !== id));
-      } catch (err) {
-        console.log(err);
-      }
-      }
-    else {
-        //some code
-    }
-  
-   
-  };
-
-  const handleUpdate = async (id) => {
     try {
-      await updateDoc(doc(db, "commuters", id));
+      await deleteDoc(doc(db, "users", id));
       setData(data.filter((item) => item.id !== id));
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const handleUpdate = async (id) => {
+   console.log(data);
   };
 
   const actionColumn = [
@@ -86,15 +77,19 @@ const Datatable = () => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            {/* <Link to="/users/test" style={{ textDecoration: "none" }}>
-              <div className="viewButton">View</div>
-            </Link> */}
+           <div
+              className="updateButton"
+              onClick={() => handleUpdate(params.row.id)}
+            >
+              Verify
+            </div>
             <div
               className="deleteButton"
               onClick={() => handleDelete(params.row.id)}
             >
               Delete
             </div>
+            
           </div>
         );
       },
@@ -103,15 +98,12 @@ const Datatable = () => {
   return (
     <div className="datatable">
       <div className="datatableTitle">
-        User List
-        {/* <Link to="/users/new" className="link">
-          Add New
-        </Link> */}
+       User Verification
       </div>
       <DataGrid
         className="datagrid"
         rows={data}
-        columns={userColumns.concat(actionColumn)}
+        columns={Shistorylog.concat(actionColumn)}
         pageSize={9}
         rowsPerPageOptions={[9]}
         checkboxSelection
@@ -120,4 +112,4 @@ const Datatable = () => {
   );
 };
 
-export default Datatable;
+export default ShowHlog;

@@ -4,19 +4,27 @@ import { HowToReg,HowToRegOutlined} from "@mui/icons-material";
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import PersonIcon from '@mui/icons-material/Person';
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { DarkModeContext } from "../../context/darkModeContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import {  signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 
 const Sidebar = () => {
+ const nav = useNavigate();
   const handleLogout = ()=>{
     
 
   signOut(auth).then(() => {
-    // Sign-out successful.
-    console.log(auth);
+    var answer = window.confirm("Logout ?");
+    if ((answer) == true) {
+      window.localStorage.setItem('user',JSON.stringify(null));    }
+    else {
+        //some code
+    }
+  
+  
+  nav('login')
   }).catch((error) => {
     // An error happened.
   });
@@ -70,7 +78,7 @@ const Sidebar = () => {
           </Link>
        
           <p className="title">Log out</p>
-          <Link   onClick={handleLogout} style={{ textDecoration: "none" }}>
+          <Link  to={"/"} onClick={handleLogout} style={{ textDecoration: "none" }}>
           <li>
             <ExitToAppIcon className="icon" />
             <span> Logout</span>

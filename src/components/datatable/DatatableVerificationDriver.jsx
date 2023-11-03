@@ -57,20 +57,36 @@ const DatatableVDriver = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    try {
-      await deleteDoc(doc(db, "drivers", id));
-      setData(data.filter((item) => item.id !== id));
-    } catch (err) {
-      console.log(err);
+    var deletevar = window.confirm("Delete this user ?")
+    if(deletevar){ 
+      try {
+        await deleteDoc(doc(db, "drivers", id));
+        setData(data.filter((item) => item.id !== id));
+      } catch (err) {
+        console.log(err);
+      }
+      
+  }else{
+
     }
+
+
+    
   };
 
   const handleUpdate = async (id) => {
-    try {
-      await updateDoc(doc(db, "drivers", id ), {isVerified: true});
-     
-    } catch (err) {
-      console.log(err);
+    
+    var updatevar = window.confirm("Verified this user ?");
+    if ((updatevar) == true) {
+      try {
+        await updateDoc(doc(db, "drivers", id ), {isVerified: true});
+       
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    else {
+        //some code
     }
   };
 

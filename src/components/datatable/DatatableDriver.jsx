@@ -54,12 +54,19 @@ const DatatableDriver = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    try {
-      await deleteDoc(doc(db, "drivers", id));
-      setData(data.filter((item) => item.id !== id));
-    } catch (err) {
-      console.log(err);
+    var deletevar = window.confirm("Delete this user ?");
+    if ((deletevar) == true) {
+      try {
+        await deleteDoc(doc(db, "drivers", id));
+        setData(data.filter((item) => item.id !== id));
+      } catch (err) {
+        console.log(err);
+      }
+      }
+    else {
+        //some code
     }
+   
   };
 
   const handleUpdate = async (id) => {
@@ -79,9 +86,9 @@ const DatatableDriver = () => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            <Link to="/users/test" style={{ textDecoration: "none" }}>
+            {/* <Link to="/users/test" style={{ textDecoration: "none" }}>
               <div className="viewButton">View</div>
-            </Link>
+            </Link> */}
             <div
               className="deleteButton"
               onClick={() => handleDelete(params.row.id)}

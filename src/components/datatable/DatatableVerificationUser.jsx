@@ -37,7 +37,7 @@ const DatatableVUser = () => {
 
     // LISTEN (REALTIME)
     const unsub = onSnapshot(
-      query(collection(db, "users"),where('isVerified', "==", false)),
+      query(collection(db, "commuters"),where('isVerified', "==", false)),
       (snapShot) => {
         let list = [];
         snapShot.docs.forEach((doc) => {
@@ -56,21 +56,33 @@ const DatatableVUser = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    try {
-      await deleteDoc(doc(db, "users", id));
+    var deletevar = window.confirm("Delete this user ?")
+    if(deletevar){ 
+      try {
+      await deleteDoc(doc(db, "commuters", id));
       setData(data.filter((item) => item.id !== id));
     } catch (err) {
       console.log(err);
     }
+  }else{
+
+    }
+   
   };
 
   const handleUpdate = async (id) => {
-    try {
-      await updateDoc(doc(db, "users", id ), {isVerified: true});
-     
-    } catch (err) {
-      console.log(err);
+    var updatevar = window.confirm("Verified this user ?");
+    if ((updatevar) == true) {
+      try {
+        await updateDoc(doc(db, "commuters", id ), {isVerified: true});
+      } catch (err) {
+        console.log(err);
+      }
     }
+    else {
+        //some code
+    }
+    
   };
 
   const actionColumn = [

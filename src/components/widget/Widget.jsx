@@ -83,11 +83,11 @@ const Widget = ({ type }) => {
        
       );
       const users = query(
-        collection(db, "users"),
+        collection(db, "commuters"),
   
       );
       const vusers = query(
-        collection(db, "users"),where("isVerified","==", true)
+        collection(db, "commuters"),where("isVerified","==", true)
   
       );
 
