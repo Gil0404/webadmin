@@ -15,8 +15,14 @@ import { db } from "../../firebase";
 import { driverColumns } from "../../datatablesourceDriver";
 
 const DatatableDriver = () => {
+  const [searchkey, setSearchkey] = useState("")
   const [data, setData] = useState([]);
-
+  const keys = ["fullName", "teacherID" , "plateNo" , "email"]
+  const search = (data) => {
+    return data.filter((item)=>keys.some(keys=>item[keys].toLowerCase().includes(searchkey))
+    
+    )
+  }
   useEffect(() => {
     // const fetchData = async () => {
     //   let list = [];
@@ -34,6 +40,7 @@ const DatatableDriver = () => {
     // fetchData();
 
     // LISTEN (REALTIME)
+
     const unsub = onSnapshot(
       collection(db, "drivers"),
       (snapShot) => {
@@ -42,6 +49,7 @@ const DatatableDriver = () => {
           list.push({ id: doc.id, ...doc.data() });
         });
         setData(list);
+      
       },
       (error) => {
         console.log(error);
@@ -107,14 +115,19 @@ const DatatableDriver = () => {
         {/* <Link to="/users/new" className="link">
           Add New
         </Link> */}
+         <input onChange={(e) => setSearchkey(e.target.value)}
+         placeholder="Search"
+         className="Searchinput"
+         ></input>
       </div>
+     
       <DataGrid
         className="datagrid"
-        rows={data}
+        rows={search(data)}
         columns={driverColumns.concat(actionColumn)}
         pageSize={9}
         rowsPerPageOptions={[9]}
-        checkboxSelection
+        
       />
     </div>
   );

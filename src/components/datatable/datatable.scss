@@ -21,6 +21,14 @@
       border-radius: 5px;
       cursor: pointer;
     }
+    .Searchinput{
+      
+      font-size: 14px;
+      border:  1px solid rgba(107, 107, 223, 0.522);
+      border-radius: 5px;
+      width: 25%;
+      height: 26px;
+    }
   }
 
   .cellWithImg {
@@ -81,6 +89,8 @@
       color: green;
       border: 1px dotted green;
       cursor: pointer;
+      
     }
+    
   }
 }

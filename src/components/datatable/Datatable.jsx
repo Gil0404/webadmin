@@ -14,7 +14,14 @@ import {
 import { db } from "../../firebase";
 
 const Datatable = () => {
+  const [searchkey, setSearchkey] = useState("")
   const [data, setData] = useState([]);
+  const keys = ["fullName", "email","UserID","mobileNo"]
+  const search = (data) => {
+    return data.filter((item)=>keys.some(keys=>item[keys].toLowerCase().includes(searchkey))
+    
+    )
+  }
 
   useEffect(() => {
     // const fetchData = async () => {
@@ -41,6 +48,7 @@ const Datatable = () => {
           list.push({ id: doc.id, ...doc.data() });
         });
         setData(list);
+        console.log(data)
       },
       (error) => {
         console.log(error);
@@ -107,10 +115,14 @@ const Datatable = () => {
         {/* <Link to="/users/new" className="link">
           Add New
         </Link> */}
+           <input onChange={(e) => setSearchkey(e.target.value)}
+         placeholder="Search"
+         className="Searchinput"
+         ></input>
       </div>
       <DataGrid
         className="datagrid"
-        rows={data}
+        rows={search(data)}
         columns={userColumns.concat(actionColumn)}
         pageSize={9}
         rowsPerPageOptions={[9]}
