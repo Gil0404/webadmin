@@ -44,6 +44,7 @@ const DatatableVUser = () => {
           list.push({ id: doc.id, ...doc.data() });
         });
         setData(list);
+        
       },
       (error) => {
         console.log(error);
@@ -122,7 +123,7 @@ const DatatableVUser = () => {
         columns={userVColumn.concat(actionColumn)}
         pageSize={9}
         rowsPerPageOptions={[9]}
-        checkboxSelection
+    
       />
     </div>
   );

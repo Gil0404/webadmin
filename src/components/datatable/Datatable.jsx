@@ -1,7 +1,7 @@
 import "./datatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import { userColumns, userRows } from "../../datatablesource";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   collection,
@@ -13,7 +13,8 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase";
 
-const Datatable = () => {
+const Datatable = (props) => {
+  const navigate = useNavigate()
   const [searchkey, setSearchkey] = useState("")
   const [data, setData] = useState([]);
   const keys = ["fullName", "email","UserID","mobileNo"]
@@ -48,7 +49,7 @@ const Datatable = () => {
           list.push({ id: doc.id, ...doc.data() });
         });
         setData(list);
-        console.log(data)
+        console.log(list)
       },
       (error) => {
         console.log(error);
@@ -94,9 +95,18 @@ const Datatable = () => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            {/* <Link to="/users/test" style={{ textDecoration: "none" }}>
-              <div className="viewButton">View</div>
-            </Link> */}
+          
+              <div className="viewButton" onClick={() => {navigate('/users/test', {replace: true , state:{
+                UserID:params.row.UserID,
+                fullName: params.row.fullName,
+                email: params.row.email,
+                faculty: params.row.faculty,
+                address: params.row.address,
+                mobileNo:params.row.mobileNo,
+                profilePic:params.row.profilePic,
+                request:params.row.id
+                }})}}>View</div>
+            
             <div
               className="deleteButton"
               onClick={() => handleDelete(params.row.id)}
@@ -126,7 +136,6 @@ const Datatable = () => {
         columns={userColumns.concat(actionColumn)}
         pageSize={9}
         rowsPerPageOptions={[9]}
-        checkboxSelection
       />
     </div>
   );

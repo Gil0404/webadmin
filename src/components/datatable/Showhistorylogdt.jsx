@@ -13,12 +13,18 @@ import {
   where,
   query
 } from "firebase/firestore";
-import { db } from "../../firebase";
+import { db, dbs } from "../../firebase";
 import { Shistorylog } from "../../showhistorylog";
+import { getDatabase, ref, child, get, onValue } from "firebase/database";
 
 const ShowHlog = () => {
+  const [searchkey, setSearchkey] = useState("")
   const [data, setData] = useState([]);
+  const keys = ["id", "departureTime"]
 
+ 
+  let list = [];
+  let dast = [];
   useEffect(() => {
     // const fetchData = async () => {
     //   let list = [];
@@ -35,26 +41,53 @@ const ShowHlog = () => {
     // };
     // fetchData();
 
-    // LISTEN (REALTIME)
-    const unsub = onSnapshot(
-      query(collection(db, "POSTED_RIDES"),where('request', "==", "IQBBRHXd5sbT5EVIHCBM7EEC0kG3")),
-      (snapShot) => {
-        let list = [];
-        snapShot.docs.forEach((doc) => {
-          list.push({ id: doc.id, ...doc.data() });
-        });
-        setData(list);
-        console.log (data)
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    // LISTEN (REALTIME)    
+   let fchild
+   let values
+      get(child(ref(getDatabase()), "RIDES_LOG/")).then((snapshot) => {
+        if (snapshot.exists()) {
+         snapshot.forEach((childSnapshot) =>{
+          // list.push({...childSnapshot.val() , id: childSnapshot.key})
+          fchild = childSnapshot.val()
+          console.log(fchild)
+          console.log("++++++++++++++++++++++++++++++++++++++")
+          // snapshot.child(fchild)
+           childSnapshot.forEach((childs=>{
+              values = childs.val()
+              let arrayreq = Object.keys(childs.val().data.request)
+              let stringreq =arrayreq.toString()
 
-    return () => {
-      unsub();
-    };
+              list.push({
+                id:childs.key,
+                departureTime:childs.val().data.status.departureTime,
+                request: stringreq,
+                driverName:childs.val().data.driverInfo.driverName
+              })
+              console.log(list)
+              console.log("++++++++++++++++++++++++++++++++++++++")
+           }))
+               
+         })
+
+
+        } else {
+          console.log("No data available");
+        }        
+        setData(list)
+      }).catch((error) => {
+        console.error(error);
+      })
+      
+    
+   
   }, []);
+
+  const search = async(data) => {
+    console.log(data)
+    return data.filter((item)=>keys.some(keys=>item[keys].toLowerCase().includes(searchkey))
+    
+    )
+  }
 
   const handleDelete = async (id) => {
     try {
@@ -98,17 +131,19 @@ const ShowHlog = () => {
   return (
     <div className="datatable">
       <div className="datatableTitle">
-       User Verification
+       History Rides
       </div>
       <DataGrid
         className="datagrid"
         rows={data}
-        columns={Shistorylog.concat(actionColumn)}
+        columns={Shistorylog}
         pageSize={9}
         rowsPerPageOptions={[9]}
-        checkboxSelection
+
       />
+     
     </div>
+    
   );
 };
 

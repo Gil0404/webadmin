@@ -14,6 +14,22 @@ export const driverVColumns = [
     },
   },
   {
+    field: "imageUrl",
+    headerName: "License id",
+    width: 100,
+
+    renderCell: (params) => {
+      return (
+        <div className="cellWithImg">
+          <a href={params.row.imageUrl} target="_blank">
+          <img className="cellImg1" src={params.row.imageUrl} alt="avatar"/>
+          </a>
+  
+        </div>
+      );
+    },
+  },
+  {
     field: "teacherID",
     headerName: "Teacher ID",
     width: 100,

@@ -129,7 +129,7 @@ const DatatableVDriver = () => {
         columns={driverVColumns.concat(actionColumn)}
         pageSize={9}
         rowsPerPageOptions={[9]}
-        checkboxSelection
+        rowHeight={100}
       />
     </div>
   );
