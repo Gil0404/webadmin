@@ -19,8 +19,9 @@ import { db } from "../../firebase";
 import { getDatabase, ref, child, get, onValue } from "firebase/database";
 import { Shistorylog } from "../../showhistorylog";
 import { DataGrid } from "@mui/x-data-grid";
+import { Shistorylogdriver } from "../../showhistorylogdriver";
 
-const Single = (props) => {
+const Singledriver = (props) => {
 
 const location = useLocation()
 const [searchkey, setSearchkey] = useState("")
@@ -47,39 +48,40 @@ useEffect(() => {
   // fetchData();
 
   // LISTEN (REALTIME)    
- let fchild
- let values
+ let commuter
+ let values =[]
     get(child(ref(getDatabase()), "RIDES_LOG/")).then((snapshot) => {
       if (snapshot.exists()) {
        snapshot.forEach((childSnapshot) =>{
-        // list.push({...childSnapshot.val() , id: childSnapshot.key})
-        fchild = childSnapshot.val()
-        console.log(location.state.request)
-        console.log(fchild)
+        // list.push({...childSnapshot.val() , id: childSnapshot.key})      
 
         console.log("++++++++++++++++++++++++++++++++++++++")
         // snapshot.child(fchild)
+        if(childSnapshot.key.includes(location.state.request)){
          childSnapshot.forEach((childs=>{
-            values = childs.val()
-            console.log(values)
-            let arrayreq = Object.keys(childs.val().data.request)
-            let stringreq =arrayreq.toString()
-            if(stringreq.includes(location.state.request)){
+            childs.forEach((childdata=>{
 
+              childdata.child('request').forEach((childrequest=>{
+                values.push(childrequest.val().userInfo.fullName)
+
+              }))
+            }))
+            commuter =  [...new Set(values)]
+console.log(commuter)
             list.push({
               id:childs.key,
               departureTime:childs.val().data.status.departureTime,
-              request: stringreq,
               driverName:childs.val().data.driverInfo.driverName,
               dateCreated:childs.val().data.status.dateCreated,
               description:childs.val().data.rideInfo.destination.description,
+              commuters:commuter
+
               
             })
-          }
-            console.log(list)
+          
             console.log("++++++++++++++++++++++++++++++++++++++")
          }))
-             
+        }
        })
 
 
@@ -147,7 +149,7 @@ const search = async(data) => {
       <DataGrid
         className="datagrid"
         rows={(data)}
-        columns={Shistorylog}
+        columns={Shistorylogdriver}
         pageSize={9}
         rowsPerPageOptions={[9]}
 
@@ -160,4 +162,4 @@ const search = async(data) => {
   );
 };
 
-export default Single;
+export default Singledriver;

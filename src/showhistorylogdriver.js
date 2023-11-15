@@ -1,4 +1,4 @@
-export const Shistorylog = [
+export const Shistorylogdriver = [
   {
     field: "dateCreated",
     headerName: "Date",
@@ -15,11 +15,13 @@ export const Shistorylog = [
     headerName: "Destination",
     width: 300,
   },
+
   {
-    field: "driverName",
-    headerName: "Driver Name",
-    width: 200,
+    field:"commuters",
+    headerName: "Commuters",
+    width: 300,
   },
+ 
 
 ];
   

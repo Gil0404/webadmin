@@ -3,6 +3,8 @@ import Login from "./pages/login/Login";
 import List from "./pages/list/List";
 import List2 from "./pages/list/List2";
 import Single from "./pages/single/Single";
+import Singledriver from "./pages/single/Singledriver";
+
 import New from "./pages/new/New";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { productInputs, userInputs } from "./formSource";
@@ -46,7 +48,6 @@ function App() {
                   </RequireAuth>
                 }
               />
-
 
               <Route
                 path=":userId"
@@ -103,10 +104,10 @@ function App() {
                 }
               />
               <Route
-                path=":productId"
+                path=":driverid"
                 element={
                   <RequireAuth>
-                    <Single />
+                    <Singledriver />
                   </RequireAuth>
                 }
               />
