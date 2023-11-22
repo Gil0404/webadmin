@@ -18,6 +18,21 @@ export const userVColumn = [
     width: 100,
   },
   {
+    field: "imageUrl",
+    headerName: "Student ID",
+    width: 100,
+
+    renderCell: (params) => {
+      return (
+        <div className="cellWithImg">
+          <a href={params.row.imageUrl} target="_blank">
+          <img className="cellImg1" src={params.row.imageUrl} alt="avatar"/>
+          </a>
+        </div>
+      );
+    },
+  },
+  {
     field: "fullName",
     headerName: "Fullname",
     width: 230,

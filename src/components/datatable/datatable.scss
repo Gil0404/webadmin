@@ -1,7 +1,22 @@
+.div{
+justify-content: center;
+flex: auto;
+.PDF {
+  padding: 2px 5px;
+  border-radius: 5px;
+  color: red;
+  border: 1px solid red;
+  cursor: pointer;
+  justify-self: flex-start;
+  font-size: medium;
+  
+}
+}
 .datatable {
   height: 600px;
   padding: 20px;
   
+ 
   .datatableTitle{
     width: 100%;
     font-size: 24px;
@@ -11,6 +26,7 @@
     align-items: center;
     justify-content: space-between;
 
+   
     .link{
       text-decoration: none;
       color: green;
@@ -99,6 +115,8 @@
       cursor: pointer;
       
     }
+
+  
     
   }
 }

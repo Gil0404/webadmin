@@ -4,6 +4,8 @@ import List from "./pages/list/List";
 import List2 from "./pages/list/List2";
 import Single from "./pages/single/Single";
 import Singledriver from "./pages/single/Singledriver";
+import Datelogs from "./pages/list/datelog";
+
 
 import New from "./pages/new/New";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -14,7 +16,6 @@ import { DarkModeContext } from "./context/darkModeContext";
 import { AuthContext } from "./context/AuthContext";
 import Vuser from "./pages/list/verficationUser";
 import Vdriver from "./pages/list/verficationDriver";
-import Slog from "./pages/list/hlog";
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
@@ -151,7 +152,32 @@ function App() {
                 index
                 element={
                   <RequireAuth>
-                    <Slog />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path=":productId"
+                element={
+                  <RequireAuth>
+                    <Single />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="new"
+                element={
+                  <RequireAuth>
+                    <New inputs={productInputs} title="Add New Product" />
+                  </RequireAuth>
+                }
+              />
+            </Route>
+            <Route path="datelog">
+              <Route
+                index
+                element={
+                  <RequireAuth>
+                    <Datelogs />
                   </RequireAuth>
                 }
               />

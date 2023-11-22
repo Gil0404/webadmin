@@ -49,7 +49,6 @@ useEffect(() => {
 
   // LISTEN (REALTIME)    
  let commuter
- let values =[]
     get(child(ref(getDatabase()), "RIDES_LOG/")).then((snapshot) => {
       if (snapshot.exists()) {
        snapshot.forEach((childSnapshot) =>{
@@ -59,6 +58,8 @@ useEffect(() => {
         // snapshot.child(fchild)
         if(childSnapshot.key.includes(location.state.request)){
          childSnapshot.forEach((childs=>{
+          let values =[]
+
             childs.forEach((childdata=>{
 
               childdata.child('request').forEach((childrequest=>{

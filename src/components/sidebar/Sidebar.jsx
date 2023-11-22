@@ -76,7 +76,14 @@ const Sidebar = () => {
               <span>Driver Verification</span>
             </li>
           </Link>
-       
+          <p className="title">Reports</p>
+          <Link to="/datelog" style={{ textDecoration: "none" }}>
+            <li>
+              <PersonIcon className="icon" />
+              <span>List</span>
+            </li>
+          </Link>
+
           <p className="title">Log out</p>
           <Link  to={"/"} onClick={handleLogout} style={{ textDecoration: "none" }}>
           <li>
