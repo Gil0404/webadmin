@@ -2,18 +2,19 @@ export const Shistorylogdate = [
   {
     field: "dateCreated",
     headerName: "Date",
-    width: 150,
+    width: 125,
+
   },
   {
     field: "departureTime",
     headerName: "Departure Time",
-    width: 150,
+    width: 100,
   },
 
   {
     field:"description",
     headerName: "Destination",
-    width: 300,
+    width: 250,
   },
   {
     field: "driverName",
